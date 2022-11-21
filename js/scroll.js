@@ -1,253 +1,423 @@
-// Get window dimension
-var ww = window.innerWidth,
-    wh = window.innerHeight;
-// Save half window dimension
-var ww2 = ww * 0.5,
-    wh2 = wh * 0.5;
+/*
+  Animated Textures
+  by Aaron Sherrill
+  Copyright 2019
+*/
+const scroll = document.querySelector(".experience")
+const body = document.querySelector("body")
+const scrollInfo = document.querySelector(".scroll-info")
+const scrollInfoText = document.querySelector(".scroll-info p")
+THREE.SpriteSheetTexture = function(image, framesX, framesY, frameWidth, frameHeight, frameDelay, _endFrame) {
+	
+	var canvas = document.createElement('canvas');
+	canvas.width = frameWidth;
+	canvas.height = frameHeight;
+	
+	var timer, x = y = count = startFrame = 0;
+		var endFrame = _endFrame || framesX * framesY;
+		var ctx = canvas.getContext('2d');
 
-// Constructor function
-function Tunnel() {
-  // Init the scene and the 
-  this.init();
-  // Create the shape of the tunnel
-  this.createMesh();
-
-  // Mouse events & window resize
-  this.handleEvents();
-
-  // Start loop animation
-  window.requestAnimationFrame(this.render.bind(this));
+	$(canvas).css({
+			width: frameWidth,
+			height: frameHeight
+		});
+		
+		var img = new Image();
+		img.crossOrigin = "Anonymous"
+		img.onload = function(){
+			console.log("spritesheet loaded");
+			timer = setInterval(nextFrame, frameDelay);
+		}
+		img.src = image;
+	
+		function nextFrame() {
+			count++;
+			
+			if(count >= endFrame ) {
+				count = 0;
+			};
+			
+			x = (count % framesX) * frameWidth;
+			y = ((count / framesX)|0) * frameHeight;
+			
+			ctx.clearRect(0, 0, frameWidth, frameHeight);
+			ctx.drawImage(img, x, y, frameWidth, frameHeight, 0, 0, frameWidth, frameHeight);
+		}
+	
+	return new THREE.CanvasTexture(canvas);
 }
 
-Tunnel.prototype.init = function() {
-  // Store the position of the mouse
-  // Default is center of the screen
-  this.mouse = {
-    position: new THREE.Vector2(0, 0),
-    target: new THREE.Vector2(0, 0)
+//
+var Mathutils = {
+    normalize: function($value, $min, $max) {
+        return ($value - $min) / ($max - $min);
+    },
+    interpolate: function($normValue, $min, $max) {
+        return $min + ($max - $min) * $normValue;
+    },
+    map: function($value, $min1, $max1, $min2, $max2) {
+        if ($value < $min1) {
+            $value = $min1;
+        }
+        if ($value > $max1) {
+            $value = $max1;
+        }
+        var res = this.interpolate(this.normalize($value, $min1, $max1), $min2, $max2);
+        return res;
+    }
+};
+var markers = [];
+
+
+//Get window size
+var ww = window.innerWidth,
+  wh = window.innerHeight;
+
+var composer, params = {
+    exposure: 1.3,
+    bloomStrength: .9,
+    bloomThreshold: 0,
+    bloomRadius: 0
   };
 
-  // Create a WebGL renderer
-  this.renderer = new THREE.WebGLRenderer({
-    antialias:true,
-    canvas: document.querySelector("#scene")
-  });
-  // Set size of the renderer and its background color
-  this.renderer.setSize(ww, wh);
-  this.renderer.setClearColor(0xe8e1bc);
+//Create a WebGL renderer
+var renderer = new THREE.WebGLRenderer({
+  canvas: document.querySelector("canvas"),
+  antialias: true,
+  shadowMapEnabled: true,
+  shadowMapType: THREE.PCFSoftShadowMap
+});
+renderer.setSize(ww, wh);
 
-  // Create a camera and move it along Z axis
-  this.camera = new THREE.PerspectiveCamera(15, ww / wh, 0.01, 1000);
-  this.camera.position.z = 0.35;
+//Create an empty scene
+var scene = new THREE.Scene();
+scene.fog = new THREE.Fog(0x194794,0,100);
 
-  // Create an empty scene and define a fog for it
-  this.scene = new THREE.Scene();
-  this.scene.fog = new THREE.Fog(0xe8e1bc, 0.8, 2.5);
-};
+var clock = new THREE.Clock();
 
-Tunnel.prototype.createMesh = function() {
-  // Empty array to store the points along the path
-  var points = [];
-  
-  // Define points along Z axis to create a curve
-  for (var i = 0; i < 5; i += 1) {
-    points.push(new THREE.Vector3(0, 0, 2.5 * (i / 4)));
-  }
-  // Set custom Y position for the last point
-  points[4].y = -0.06;
+//Create a perpsective camera
+var cameraRotationProxyX = 3.14159;
+var cameraRotationProxyY = 0;
 
-  // Create a curve based on the points
-  this.curve = new THREE.CatmullRomCurve3(points);
-  // Define the curve type
+var camera = new THREE.PerspectiveCamera(45, ww / wh, 0.001, 200);
+camera.rotation.y = cameraRotationProxyX;
+camera.rotation.z = cameraRotationProxyY;
 
-  // Empty geometry
-  var geometry = new THREE.Geometry();
-  // Create vertices based on the curve
-  geometry.vertices = this.curve.getPoints(70);
-  // Create a line from the points with a basic line material
-  this.splineMesh = new THREE.Line(geometry, new THREE.LineBasicMaterial());
+//camera.position.z = 400;
+var c = new THREE.Group();
+c.position.z = 400;
 
-  // Create a material for the tunnel with a custom texture
-  // Set side to BackSide since the camera is inside the tunnel
-  this.tubeMaterial = new THREE.MeshBasicMaterial({
-    side: THREE.BackSide,
-    map: tunnelTexture
-  });
-  // Repeat the pattern
-  this.tubeMaterial.map.wrapS = THREE.RepeatWrapping;
-  this.tubeMaterial.map.wrapT = THREE.RepeatWrapping;
-  this.tubeMaterial.map.repeat.set(1, 1);
-
-  // Create a tube geometry based on the curve
-  this.tubeGeometry = new THREE.TubeGeometry(this.curve, 70, 0.02, 30, false);
-  // Create a mesh based on the tube geometry and its material
-  this.tubeMesh = new THREE.Mesh(this.tubeGeometry, this.tubeMaterial);
-  // Push the tube into the scene
-  this.scene.add(this.tubeMesh);
-
-  // Clone the original tube geometry
-  // Because we will modify the visible one but we need to keep track of the original position of the vertices
-  this.tubeGeometry_o = this.tubeGeometry.clone();
-  this.mouse.target.x = 0.9227340267459139;
-  this.mouse.target.y = -0.02600297176820208;
-  
-};
-
-Tunnel.prototype.handleEvents = function() {
-  // When user resize window
-  window.addEventListener('resize', this.onResize.bind(this), false);
-  // When user move the mouse
-  document.body.addEventListener('mousemove', this.onMouseMove.bind(this), false);
-  
-  // Listen to device orientation events
-  this.deviceOrientation = new FULLTILT.DeviceOrientation();
-  var self = this;
-  this.deviceOrientation.start(function(){
-    self.onDeviceOrientationChange();
-  });
-
-};
-
-Tunnel.prototype.onResize = function() {
-  // On resize, get new width & height of window
-  ww = window.innerWidth;
-  wh = window.innerHeight;
-  ww2 = ww * 0.5;
-  wh2 = wh * 0.5;
-
-  // Update camera aspect
-  this.camera.aspect = ww / wh;
-  // Reset aspect of the camera
-  this.camera.updateProjectionMatrix();
-  // Update size of the canvas
-  this.renderer.setSize(ww, wh);
-};
-
-Tunnel.prototype.onDeviceOrientationChange = function() {
-  // When the user move his device, change mouse target
-  var euler = this.deviceOrientation.getScreenAdjustedEuler();
-  if(euler.alpha > 0 && euler.beta < 90){
-      this.mouse.target.y = (Math.max(-1, Math.min(1, ((euler.beta - 20) / 30))));
-      this.mouse.target.x = -(Math.max(-1, Math.min(1, ((euler.gamma) / 30))));
-  }
-};
-
-Tunnel.prototype.updateCameraPosition = function() {
-  // Update the mouse position with some lerp
-  this.mouse.position.x += (this.mouse.target.x - this.mouse.position.x) / 30;
-  this.mouse.position.y += (this.mouse.target.y - this.mouse.position.y) / 30;
-
-  // Rotate Z & Y axis
-  this.camera.rotation.z = this.mouse.position.x * 0.2;
-  this.camera.rotation.y = Math.PI - (this.mouse.position.x * 0.06);
-  // Move a bit the camera horizontally & vertically
-  this.camera.position.x = this.mouse.position.x * 0.015;
-  this.camera.position.y = -this.mouse.position.y * 0.015;
-  
-};
-
-Tunnel.prototype.onMouseMove = function(e) {
-
-};
-
-const infoC = document.querySelector(".info")
-const info = document.querySelector(".info p")
-const scroll = document.querySelector(".space-scroll")
-
-Tunnel.prototype.updateMaterialOffset = function() {
-  this.speed = 0.000040;
-  // Update the offset of the material
-  this.tubeMaterial.map.offset.x += this.speed;
-  this.tubeMaterial.map.offset.y += 0.001;
-  window.addEventListener("wheel", (e)=>{
-    if (scroll.classList.contains("opacity")) {
-      if (e.deltaY < 0) {
-        // this.tubeMaterial.map.offset.x -= this.speed;
-        scroll.classList.remove("opacity")
-        this.tubeMaterial.map.offset.x = 0
-      } else {
-        this.tubeMaterial.map.offset.x += this.speed;
-      }
-
-      /*
-      
-      if (this.tubeMaterial.map.offset.x > 0.3895999999999734 && this.tubeMaterial.map.offset.x < 1.7038999999999388) {
-        info.textContent = "Lorem ipsum dolor sit amet, text one"
-        infoC.classList.add("info-open")
-      } else if (this.tubeMaterial.map.offset.x > 1.122800000000158 && this.tubeMaterial.map.offset.x < 2.162800000000158) {
-        info.textContent = "Lorem ipsum dolor sit amet, text two"
-        infoC.classList.add("info-open")
-      } else if (this.tubeMaterial.map.offset.x > 2.562800000000158 && this.tubeMaterial.map.offset.x < 3.262800000000158) {
-        info.textContent = "Lorem ipsum dolor sit amet, text tree"
-        infoC.classList.add("info-open")
-      }
-      */
-
-    }
-  })
-
-};
+c.add(camera);
+scene.add(c);
 
 
-Tunnel.prototype.updateCurve = function() {
-  var index = 0,
-      vertice_o = null,
-      vertice = null;
-  // For each vertice of the tube, move it a bit based on the spline
-  for (var i = 0, j = this.tubeGeometry.vertices.length; i < j; i += 1) {
-    // Get the original tube vertice
-    vertice_o = this.tubeGeometry_o.vertices[i];
-    // Get the visible tube vertice
-    vertice = this.tubeGeometry.vertices[i];
-    // Calculate index of the vertice based on the Z axis
-    // The tube is made of 30 circles of vertices
-    index = Math.floor(i / 30);
-    // Update tube vertice
-    vertice.x += ((vertice_o.x + this.splineMesh.geometry.vertices[index].x) - vertice.x) / 10;
-    vertice.y += ((vertice_o.y + this.splineMesh.geometry.vertices[index].y) - vertice.y) / 5;
-  }
-  // Warn ThreeJs that the points have changed
-  this.tubeGeometry.verticesNeedUpdate = true;
-
-  // Update the points along the curve base on mouse position
-  this.curve.points[2].x = -this.mouse.position.x * 0.1;
-  this.curve.points[4].x = -this.mouse.position.x * 0.1;
-  this.curve.points[2].y = this.mouse.position.y * 0.1;
-  
-  // Warn ThreeJs that the spline has changed
-  this.splineMesh.geometry.verticesNeedUpdate = true;
-  this.splineMesh.geometry.vertices = this.curve.getPoints(70);
-};
-
-Tunnel.prototype.render = function() {
-
-  // Update material offset
-  this.updateMaterialOffset();
-
-  // Update camera position & rotation
-  this.updateCameraPosition();
-
-  // Update the tunnel 
-  this.updateCurve();
-
-  // render the scene
-  this.renderer.render(this.scene, this.camera);
-
-  // Animation loop
-  window.requestAnimationFrame(this.render.bind(this));
-};
+//set up render pass
+var renderScene = new THREE.RenderPass( scene, camera );
+var bloomPass = new THREE.UnrealBloomPass( new THREE.Vector2( window.innerWidth, window.innerHeight ), 1.5, 0.4, 0.85 );
+			bloomPass.renderToScreen = true;
+			bloomPass.threshold = params.bloomThreshold;
+			bloomPass.strength = params.bloomStrength;
+			bloomPass.radius = params.bloomRadius;
+			composer = new THREE.EffectComposer( renderer );
+			composer.setSize( window.innerWidth, window.innerHeight );
+			composer.addPass( renderScene );
+			composer.addPass( bloomPass );
 
 
-// Create a new loader
-var loader = new THREE.TextureLoader();
-// Prevent crossorigin issue
-loader.crossOrigin = "Anonymous";
-// Load the texture
-loader.load("/InfiniteTubes/img/demo3/galaxyTexture.jpg",
-            function(texture){
-  // When texture is loaded, init the scene
-  document.body.classList.remove("loading");
-  window.tunnelTexture = texture;
-  window.tunnel = new Tunnel();
+//Array of points
+var points = [
+	[10, 89, 0],
+	[50, 88, 10],
+	[76, 139, 20],
+	[126, 141, 12],
+	[150, 112, 8],
+	[157, 73, 0],
+	[180, 44, 5],
+	[207, 35, 10],
+	[232, 36, 0]
+];
+
+var p1, p2;
+
+//Convert the array of points into vertices
+for (var i = 0; i < points.length; i++) {
+  var x = points[i][0];
+  var y = points[i][2];
+  var z = points[i][1];
+  points[i] = new THREE.Vector3(x, y, z);
+}
+//Create a path from the points
+var path = new THREE.CatmullRomCurve3(points);
+//path.curveType = 'catmullrom';
+path.tension = .5;
+
+//Create a new geometry with a different radius
+var geometry = new THREE.TubeGeometry( path, 300, 4, 32, false );
+
+var texture = new THREE.TextureLoader().load( 'https://s3-us-west-2.amazonaws.com/s.cdpn.io/68819/3d_space_5.jpg' , function ( texture ) {
+
+    texture.wrapS = texture.wrapT = THREE.RepeatWrapping;
+    texture.offset.set( 0, 0 );
+    texture.repeat.set( 15, 2 );
+
+} );
+
+
+var mapHeight = new THREE.TextureLoader().load('https://s3-us-west-2.amazonaws.com/s.cdpn.io/68819/waveform-bump3.jpg', function( texture){
+ 
+  texture.wrapS = texture.wrapT = THREE.RepeatWrapping;
+    texture.offset.set( 0, 0 );
+    texture.repeat.set( 15, 2 );
   
 });
+
+var material = new THREE.MeshPhongMaterial({
+  side:THREE.BackSide,
+  map: texture,
+  shininess: 20,
+  bumpMap: mapHeight,
+  bumpScale: -.03,
+  specular: 0x0b2349
+});
+
+//Create a mesh
+var tube = new THREE.Mesh( geometry, material );
+//tube.receiveShadows = true;
+//Push the mesh into the scene
+scene.add( tube );
+
+//inner tube.=========================================
+
+//Create a new geometry with a different radius
+var geometry = new THREE.TubeGeometry( path, 150, 3.4, 32, false );
+var geo = new THREE.EdgesGeometry( geometry );
+//THREE.EdgesGeometry( geometry );
+
+var mat = new THREE.LineBasicMaterial( {
+  linewidth: 2,
+  opacity: .2,
+  transparent: 1
+} );
+
+var wireframe = new THREE.LineSegments( geo, mat );
+
+
+//scene.add( wireframe );
+
+  
+  
+
+
+
+//-------------------------
+
+
+//Create a point light in our scene
+var light = new THREE.PointLight(0xffffff, .35, 4,0);
+light.castShadow = true;
+scene.add(light);
+
+
+function updateCameraPercentage(percentage) {
+  p1 = path.getPointAt(percentage%1);
+  p2 = path.getPointAt((percentage + 0.03)%3);
+  p3 = path.getPointAt((percentage + 0.05)% 1);
+
+  c.position.set(p1.x,p1.y,p1.z);
+  c.lookAt(p2);
+  light.position.set(p2.x, p2.y, p2.z);
+}
+
+
+var cameraTargetPercentage = 0;
+var currentCameraPercentage = 0;
+
+
+
+gsap.defaultEase = Linear.easeNone;
+
+var tubePerc = {
+  percent: 0
+}
+
+gsap.registerPlugin(ScrollTrigger);
+
+var tl = gsap.timeline({
+  scrollTrigger: {
+    trigger: ".scrollTarget",
+    start: "top top",
+    end: "bottom 100%",
+    scrub: 5,
+    markers: {color: "white"}
+  }
+})
+tl.to(tubePerc, {
+   percent:.90,
+   ease: Linear.easeNone,
+   duration: 20,
+   onUpdate: function() {
+     cameraTargetPercentage = tubePerc.percent;
+     if (tubePerc.percent == 0) {
+      body.classList.add("ov-hidden")
+      scroll.classList.remove("scroll-open")
+      scrollInfo.classList.remove("scroll-info-open")
+     }
+    if (tubePerc.percent > 0.095396){
+      scrollInfoText.textContent = "Lorem ipsum dolor sit amet consectetur, adipisicing elit. Voluptatibus sit voluptates iure, dignissimos impedit quidem nulla ea nobis perspiciatis. text one"
+      scrollInfo.classList.add("scroll-info-open")
+    } 
+    if (tubePerc.percent > 0.400) {
+      scrollInfo.classList.remove("scroll-info-open")
+    }
+    if (tubePerc.percent > 0.700){
+      scrollInfoText.textContent = "Lorem ipsum dolor sit amet consectetur, adipisicing elit. Voluptatibus sit voluptates iure, dignissimos impedit quidem nulla ea nobis perspiciatis. text two"
+      scrollInfo.classList.add("scroll-info-open")
+    } 
+    if (tubePerc.percent > 1.100) {
+      scrollInfo.classList.remove("scroll-info-open")
+    }
+   }
+});
+
+function render(){
+  //texture.offset.x+=.004
+  //texture2.needsUpdate = true;
+  currentCameraPercentage = cameraTargetPercentage
+  
+  camera.rotation.y += (cameraRotationProxyX - camera.rotation.y) / 15;
+  camera.rotation.x += (cameraRotationProxyY - camera.rotation.x) / 15;
+  
+  updateCameraPercentage(currentCameraPercentage);
+  
+  //animate texture
+  
+  particleSystem1.rotation.y += 0.00002;
+  particleSystem2.rotation.x += 0.00005;
+  particleSystem3.rotation.z += 0.00001;
+  
+  //Render the scene
+  //renderer.render(scene, camera);
+  composer.render();
+
+  requestAnimationFrame(render);
+}
+requestAnimationFrame(render);
+
+$('canvas').click(function(){
+  console.clear();
+  markers.push(p1);
+  console.log(JSON.stringify(markers));
+});
+
+window.addEventListener( 'resize', function () {
+  
+  var width = window.innerWidth;
+  var height = window.innerHeight;
+  
+  camera.aspect = width / height;
+	camera.updateProjectionMatrix();
+  
+  renderer.setSize( width, height );
+  composer.setSize( width, height );
+  
+}, false );
+
+
+
+var lastPlace = 0;
+var newPlace = 0;
+
+
+
+//particle system
+// create the particle variables
+//
+var spikeyTexture = new THREE.TextureLoader().load('https://s3-us-west-2.amazonaws.com/s.cdpn.io/68819/spikey.png');
+
+
+var particleCount = 6800,
+    particles1 = new THREE.Geometry(),
+    particles2 = new THREE.Geometry(),
+    particles3 = new THREE.Geometry(),
+    pMaterial = new THREE.ParticleBasicMaterial({
+      color: 0xFFFFFF,
+      size: .5,
+      map: spikeyTexture,
+      transparent: true,
+      blending: THREE.AdditiveBlending
+    });
+
+// now create the individual particles
+for (var p = 0; p < particleCount; p++) {
+
+  // create a particle with random
+  // position values, -250 -> 250
+  var pX = Math.random() * 500 - 250,
+      pY = Math.random() * 50 - 25,
+      pZ = Math.random() * 500 - 250,
+      particle = new THREE.Vector3(pX, pY, pZ);
+
+  // add it to the geometry
+  particles1.vertices.push(particle);
+}
+
+// now create the individual particles
+for (var p = 0; p < particleCount; p++) {
+
+  // create a particle with random
+  // position values, -250 -> 250
+  var pX = Math.random() * 500,
+      pY = Math.random() * 10 - 5,
+      pZ = Math.random() * 500,
+      particle = new THREE.Vector3(pX, pY, pZ);
+
+  // add it to the geometry
+  particles2.vertices.push(particle);
+}
+
+// now create the individual particles
+for (var p = 0; p < particleCount; p++) {
+
+  // create a particle with random
+  // position values, -250 -> 250
+  var pX = Math.random() * 500,
+      pY = Math.random() * 10 - 5,
+      pZ = Math.random() * 500,
+      particle = new THREE.Vector3(pX, pY, pZ);
+
+  // add it to the geometry
+  particles3.vertices.push(particle);
+}
+
+// create the particle system
+var particleSystem1 = new THREE.ParticleSystem(
+    particles1,
+    pMaterial);
+
+var particleSystem2 = new THREE.ParticleSystem(
+    particles2,
+    pMaterial);
+
+var particleSystem3 = new THREE.ParticleSystem(
+    particles3,
+    pMaterial);
+
+// add it to the scene
+scene.add(particleSystem1);
+scene.add(particleSystem2);
+scene.add(particleSystem3);
+
+
+$(document).mousemove(function(evt) {
+  cameraRotationProxyX = Mathutils.map(evt.clientX, 0, window.innerWidth, 3.24, 3.04);
+  cameraRotationProxyY = Mathutils.map(evt.clientY, 0, window.innerHeight, -.1, .1);
+});
+
+window.addEventListener("wheel", ()=>{
+  body.classList.remove("ov-hidden")
+  scroll.classList.add("scroll-open")
+})
+
+window.onbeforeunload = function () {
+  window.scrollTo(0, 0);
+}

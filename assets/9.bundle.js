@@ -1656,6 +1656,7 @@
                 });
             },
             onLandingOutEnded() {
+              document.querySelector(".main-container").classList.add("section-view")
             },
             onVortexOutEnded() {
               (this.$appdatas.store.showHubPreview = !0),

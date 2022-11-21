@@ -11,6 +11,10 @@ a {
   color: #fff;
 }
 
+.section-view {
+  z-index: 20;
+}
+
 #canvas {
   position: fixed;
   top: 0;
@@ -32,8 +36,7 @@ a {
   justify-content: space-between;
   min-height: 100vh;
   position: relative;
-  z-index: 10;
-  overflow: hidden;
+
 }
 .logo-links {
   height: 100px;
