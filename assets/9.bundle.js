@@ -1656,21 +1656,6 @@
                 });
             },
             onLandingOutEnded() {
-              document.querySelector(".t").classList.toggle("opacity")
-              document.querySelector(".space").classList.remove("dp")
-              const sectionTitle = document.querySelector(".section-title")
-const currentWall = document.querySelector("#canvas")
-const afterWall = document.querySelector(".space")
-
-window.addEventListener("wheel", (e)=>{
-    if (e.deltaY < 0) {
-        sectionTitle.classList.remove("tresd")
-        afterWall.classList.remove("opacity")
-    } else {
-        sectionTitle.classList.add("tresd")
-        afterWall.classList.add("opacity")
-    }
-})
             },
             onVortexOutEnded() {
               (this.$appdatas.store.showHubPreview = !0),
