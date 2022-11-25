@@ -214,7 +214,7 @@ a {
 
 @media (min-width: 1440px){
   .section-title {
-    font-size: 5rem;
+    font-size: 3rem;
   }
   .section-title h1:last-child {
     transform: translateY(-60px);
