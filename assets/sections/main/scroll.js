@@ -252,6 +252,22 @@ tl.to(tubePerc, {
    duration: 20,
    onUpdate: function() {
      cameraTargetPercentage = tubePerc.percent;
+     if (scroll.classList.contains("scroll-open")) {
+      if (tubePerc.percent > 0.095396){
+        scrollInfoText.textContent = textScroll
+        scrollInfo.classList.add("scroll-info-open")
+      } 
+      if (tubePerc.percent > 0.400) {
+        scrollInfo.classList.remove("scroll-info-open")
+      }
+      if (tubePerc.percent > 0.700){
+        scrollInfoText.textContent = textScroll2
+        scrollInfo.classList.add("scroll-info-open")
+      } 
+      if (tubePerc.percent > 1.100) {
+        scrollInfo.classList.remove("scroll-info-open")
+      }
+     }
    }
 });
 
@@ -394,10 +410,10 @@ window.addEventListener("wheel", (e)=>{
     body.classList.add("ov-scroll")
     scroll.classList.add("scroll-open")
   } else if (e.deltaY < 0){
-    window.scroll(0, 0)
     body.classList.remove("ov-scroll")
     scroll.classList.remove("scroll-open")
     scrollInfo.classList.remove("scroll-info-open")
+    window.scroll(0, 0)
   }
 })
 
