@@ -252,25 +252,6 @@ tl.to(tubePerc, {
    duration: 20,
    onUpdate: function() {
      cameraTargetPercentage = tubePerc.percent;
-     if (tubePerc.percent == 0) {
-      body.classList.add("ov-hidden")
-      scroll.classList.remove("scroll-open")
-      scrollInfo.classList.remove("scroll-info-open")
-     }
-    if (tubePerc.percent > 0.095396){
-      scrollInfoText.textContent = "Lorem ipsum dolor sit amet consectetur, adipisicing elit. Voluptatibus sit voluptates iure, dignissimos impedit quidem nulla ea nobis perspiciatis. text one"
-      scrollInfo.classList.add("scroll-info-open")
-    } 
-    if (tubePerc.percent > 0.400) {
-      scrollInfo.classList.remove("scroll-info-open")
-    }
-    if (tubePerc.percent > 0.700){
-      scrollInfoText.textContent = "Lorem ipsum dolor sit amet consectetur, adipisicing elit. Voluptatibus sit voluptates iure, dignissimos impedit quidem nulla ea nobis perspiciatis. text two"
-      scrollInfo.classList.add("scroll-info-open")
-    } 
-    if (tubePerc.percent > 1.100) {
-      scrollInfo.classList.remove("scroll-info-open")
-    }
    }
 });
 
@@ -408,9 +389,16 @@ $(document).mousemove(function(evt) {
   cameraRotationProxyY = Mathutils.map(evt.clientY, 0, window.innerHeight, -.1, .1);
 });
 
-window.addEventListener("wheel", ()=>{
-  body.classList.remove("ov-hidden")
-  scroll.classList.add("scroll-open")
+window.addEventListener("wheel", (e)=>{
+  if (e.deltaY > 0) {
+    body.classList.add("ov-scroll")
+    scroll.classList.add("scroll-open")
+  } else if (e.deltaY < 0){
+    window.scroll(0, 0)
+    body.classList.remove("ov-scroll")
+    scroll.classList.remove("scroll-open")
+    scrollInfo.classList.remove("scroll-info-open")
+  }
 })
 
 window.onbeforeunload = function () {

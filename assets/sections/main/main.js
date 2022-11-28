@@ -10,3 +10,10 @@ window.addEventListener("DOMContentLoaded", ()=>{
     }
 
 })
+
+const btnMenu = document.querySelector("#open-menu"),
+      menu = document.querySelector(".menu-container")
+
+btnMenu.addEventListener("click", ()=>{
+    menu.classList.toggle("open-menu")
+})
