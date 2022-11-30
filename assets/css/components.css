@@ -14,7 +14,7 @@ a {
     width: 100%;
     height: 100vh;
     opacity: 0;
-    transition: 1s opacity;
+    transition: 4s;
 }
 
 .scrollTarget {

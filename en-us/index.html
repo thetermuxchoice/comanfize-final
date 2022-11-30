@@ -14,6 +14,10 @@
 
     <link rel="icon" type="image/ico" href="/favicon.ico" />
     <link rel="stylesheet" href="/assets/sections/intro/main.css">
+    <link
+        rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"
+    />
     <script>
         window.user_lang = "en-us";
     </script>
@@ -32,12 +36,29 @@
     </div>
 
     <style>
-
+        @font-face {
+            font-family: "aquire";
+            src: url("/assets/fonts/aquire/Aquire-BW0ox.otf");
+        }
+        .c-Intro-landing-title {
+            margin-top: -20px;
+        }
+        @media(min-width: 1350px){
+            .c-Intro-landing-title {
+                margin-top: -100px;
+            }
+        }
+        .c-Intro-landing-title-word:first-child, .c-Intro-landing-title-word:nth-child(2) {
+            margin-bottom: 20px;
+            text-transform: uppercase;
+            font-weight: 100;
+            font-family: "aquire" !important;
+        }
         .c-Intro-landing-title-word:last-child, .c-Intro-landing-subtitle  {
             display: none;
         }
         .intro-img {
-            width: 400px !important;
+            width: 400px;
         }
     </style>
     <script type="text/javascript" src="/assets/main.js"></script>
