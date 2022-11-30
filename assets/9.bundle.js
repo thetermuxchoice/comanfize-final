@@ -614,9 +614,9 @@
                     [t._v(t._s(t.t("el_content.landing_title")))]
                   ),
                   t._v(" "),
-                  e("h2", {
-                    staticClass: "c-Intro-landing-subtitle t-text--xxl",
-                    domProps: { innerHTML: t._s(t.tagline) },
+                  e("img", {
+                    staticClass: "intro-img",
+                    attrs: {"src": "/assets/img/logo.png"}
                   }),
                 ]),
                 t._v(" "),
