@@ -149,11 +149,11 @@ path.tension = .5;
 //Create a new geometry with a different radius
 var geometry = new THREE.TubeGeometry( path, 300, 4, 32, false );
 
-var texture = new THREE.TextureLoader().load( 'https://s3-us-west-2.amazonaws.com/s.cdpn.io/68819/3d_space_5.jpg' , function ( texture ) {
+var texture = new THREE.TextureLoader().load( 'https://images.unsplash.com/photo-1503264116251-35a269479413?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxzZWFyY2h8MzZ8fHN0YXIlMjB0ZXh0dXJlfGVufDB8fDB8fA%3D%3D&auto=format&fit=crop&w=500&q=60' , function ( texture ) {
 
     texture.wrapS = texture.wrapT = THREE.RepeatWrapping;
     texture.offset.set( 0, 0 );
-    texture.repeat.set( 15, 2 );
+    texture.repeat.set( 15, 1 );
 
 } );
 
@@ -169,10 +169,9 @@ var mapHeight = new THREE.TextureLoader().load('https://s3-us-west-2.amazonaws.c
 var material = new THREE.MeshPhongMaterial({
   side:THREE.BackSide,
   map: texture,
-  shininess: 20,
+  shininess: 0,
   bumpMap: mapHeight,
   bumpScale: -.03,
-  specular: 0x0b2349
 });
 
 //Create a mesh

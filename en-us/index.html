@@ -36,7 +36,8 @@
     </div>
 
     <style>
-        @font-face {
+        /*
+                @font-face {
             font-family: "aquire";
             src: url("/assets/fonts/aquire/Aquire-BW0ox.otf");
         }
@@ -54,13 +55,41 @@
             font-weight: 100;
             font-family: "aquire" !important;
         }
+        */
         .c-Intro-landing-title-word:last-child, .c-Intro-landing-subtitle  {
             display: none;
         }
         .intro-img {
             width: 400px;
         }
+        .c-Intro-landing-title, .c-Intro-landing-draggable{
+            display: none;
+        }
+        .intro-explore {
+            transform: translateY(100px);
+            text-transform: uppercase;
+            color: rgb(235, 235, 235);
+            border-bottom: 1px solid #fff;
+            padding-bottom: 5px;
+            width: 170px;
+            margin: 0 auto;
+        }
+        .intro-opacity {
+            opacity: 0;
+            transition: 1s opacity;
+        }
+        @media(max-width: 600px){
+            .intro-explore {
+                display: none;
+            }
+            .c-Intro-landing-draggable{
+                display: block;
+            }
+        }
     </style>
+    <script>
+
+    </script>
     <script type="text/javascript" src="/assets/main.js"></script>
 </body>
 </html>

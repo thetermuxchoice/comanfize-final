@@ -617,7 +617,16 @@
                   e("img", {
                     staticClass: "intro-img animate__animated animate__backInUp",
                     attrs: {"src": "/assets/img/logo.png"}
-                  }),
+                  }), 
+                  e("p", {
+                    staticClass: "intro-explore",
+                    on: {
+                      click: function (n) {
+                        return t.onDragEnd(n);
+                      },
+                    }
+                  },
+                  [t._v(t._s(t.t("intro.explore")))]),
                 ]),
                 t._v(" "),
                 e(
@@ -1189,7 +1198,6 @@
                 (this.oldIndex = this.currentIndex),
                 (this.oldFrame = this.frame),
                 (this.startX = this.pointerEvent.clientX),
-                console.log("onDragStart", this.currentDecade),
                 this.$appdatas.sendEvent(
                   "navigation",
                   "swipe",
@@ -1213,6 +1221,7 @@
               n >= 0 && n < this.nbFrames && (this.frame = n);
             },
             onDragEnd(t) {
+              
               if (this.dragStart) {
                 if (
                   ((this.dragStart = !1),
@@ -1743,7 +1752,21 @@
                 (this.$refs.lineInner.style.transform = `translateY(${-n}px) translateZ(0)`));
             },
             onDragEnd(t) {
-              if (!this.dragStart) return;
+              document.querySelector(".intro-explore").addEventListener("click", ()=>{
+                setTimeout(()=>{
+                  document.querySelector(".intro-img").style.display = "none"
+                  document.querySelector(".intro-explore").classList.add("intro-opacity")
+                }, 2000)
+                this.$refs.landingOut.play().then(() => {
+                  this.$refs.landingLoop.pause(),
+                    this.$refs.landingIntro.pause(),
+                    this.getModule().playLandingOut(),
+                    (this.videoActive = 2),
+                    (this.$appdatas.store.pageTracking = "/vortex");
+                    return
+                });
+              })
+
               this.dragStart = !1;
               let n = this.y > -68 ? 0 : this.maxDrag;
               (this.tween = l.b.fromTo(
@@ -1773,6 +1796,7 @@
                         (this.videoActive = 2),
                         (this.$appdatas.store.pageTracking = "/vortex");
                     }));
+             
             },
             onVortexEnd(t) {
               (this.videoActive = 3),
@@ -1801,8 +1825,7 @@
                   ));
             },
             onSkip() {
-              (this.isSkip = !0),
-                this.$appdatas.sendEvent("click", "skipdecades", "");
+              window.location.assign("/en-us/home.html")
             },
             playSound(t) {
               this.getModule().playSound(t);

@@ -25,7 +25,7 @@
     "common.tuto_rotate": "Please rotate screen to vertical",
     "common.browser_text": "Sorry, your browser is not compatible. Consider updating to enjoy The ANRcade.",
     "common.browser_cta": "Update Now",
-    "common.skip_button": "Skip Ahead",
+    "common.skip_button": "Skip Intro",
     "common.cta_hub": "Return to ANRcade",
     "common.cta_enter_alt2": "Enter",
     "common.share_facebook": "Facebook",
@@ -122,5 +122,6 @@
     "gaming.game3_tuto2_desktop": "Move left, right, up or down",
     "gaming.game4_tuto2_desktop": "Time it for a better bounce",
     "gaming.score_name_points": "Your Score",
-    "gaming.scroll_down_sentence": "You've Played, Now Explore"
+    "gaming.scroll_down_sentence": "You've Played, Now Explore",
+    "intro.explore": "Start Experience"
   }
