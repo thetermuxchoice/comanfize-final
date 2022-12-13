@@ -7,6 +7,7 @@
   <title>Document</title>
   <link rel="stylesheet" href="/assets/css/background.css">
   <link rel="stylesheet" href="/assets/css/main.css">
+  <link rel="stylesheet" href="/assets/css/music-anim.css">
 </head>
 <body class="opening hide-UI view-2D zoom-large data-close controls-close">
     <div class="close-full-planet">
@@ -24,36 +25,43 @@
         <img src="/assets/icons/fb.svg" alt="">
         <img src="/assets/icons/insta.svg" alt="">
         <img src="/assets/icons/linkedin.svg" alt="">
+        <div class="now playing" id="music">
+          <span class="bar n1">A</span>
+          <span class="bar n2">B</span>
+          <span class="bar n3">c</span>
+        </div>
       </div>
     </div>
     <div id="data">
-      <div class="data-container">
+      <!--
+        <div class="data-container">
         <img class="data-img-sun" src="https://www.solarsystemscope.com/textures/previews/preview_sun.jpg" alt="">
         <a class="sun" title="sun" href="#sunspeed"><span class="data-colored"></span>Sun</a>
       </div>
+      -->
       <div class="data-container">
         <img class="data-img" src="https://www.solarsystemscope.com/images/textures/full/2k_makemake_fictional.jpg" alt="">
-        <a class="mercury" title="mercury" href="#mercuryspeed"><span class="data-colored"></span>Mercury</a>
+        <a class="mercury" title="mercury" href="#mercuryspeed"><span class="data-colored"></span>Home</a>
       </div>
       <div class="data-container">
         <img class="data-img" src="https://nasa3d.arc.nasa.gov/shared_assets/images/ven0aaa2/ven0aaa2-copy-428-321.jpg" alt="">
-        <a class="venus" title="venus" href="#venusspeed"><span class="data-colored"></span>Venus</a>
+        <a class="venus" title="venus" href="#venusspeed"><span class="data-colored"></span>Services</a>
       </div>
       <div class="data-container">
         <img class="data-img" src="https://img00.deviantart.net/04ef/i/2009/114/3/e/new_earth_texture_map_by_lightondesigns.jpg" alt="">
-        <a class="earth active" title="earth" href="#earthspeed"><span class="data-colored"></span>Earth</a>
+        <a class="earth active" title="earth" href="#earthspeed"><span class="data-colored"></span>Portfolio</a>
       </div>
       <div class="data-container">
         <img class="data-img" src="https://s3-us-west-2.amazonaws.com/s.cdpn.io/217233/mars_texture.jpg" alt="">
-        <a class="mars" title="mars" href="#marsspeed"><span class="data-colored"></span>Mars</a>
+        <a class="mars" title="mars" href="#marsspeed"><span class="data-colored"></span>About Us</a>
       </div>
       <div class="data-container">
         <img class="data-img" src="https://www.jpl.nasa.gov/spaceimages/images/largesize/PIA07782_hires.jpg" alt="">
-        <a class="jupiter" title="jupiter" href="#jupiterspeed"><span class="data-colored"></span>Jupiter</a>
+        <a class="jupiter" title="jupiter" href="#jupiterspeed"><span class="data-colored"></span>Contact Us</a>
       </div>
       <div class="data-container">
         <img class="data-img" src="https://www.solarsystemscope.com/images/textures/full/2k_saturn.jpg" alt="">
-        <a class="saturn" title="saturn" href="#saturnspeed"><span class="data-colored"></span>Saturn</a>
+        <a class="saturn" title="saturn" href="#saturnspeed"><span class="data-colored"></span>Team</a>
       </div>
       <div class="data-container">
         <img class="data-img" src="https://img00.deviantart.net/957c/i/2017/165/4/9/uranus_texture_map_by_jcpag2010-db7yjwb.png" alt="">
@@ -63,6 +71,14 @@
         <img class="data-img" src="https://www.solarsystemscope.com/images/textures/full/2k_neptune.jpg" alt="">
         <a class="neptune" title="neptune" href="#neptunespeed"><span class="data-colored"></span>Neptune</a>
       </div>
+      <div class="btn-view-full-planet">
+        <button id="btnOpenFullPlanet">View Full Planet<img src="/assets/icons/fullscreen.svg"/></button>
+      </div>
+    </div>
+
+    <div class="section-info">
+      <p>Lorem ipsum dolor sit, amet consectetur adipisicing elit. Eligendi nam cumque eum optio exercitationem. Doloremque corrupti officiis delectus culpa possimus maiores quod voluptas dolores dolorum? Obcaecati possimus rem iste consequatur? Portfolio</p>
+      <a href="">Read More</a>
     </div>
     <style>
       .nav-logo {
@@ -130,13 +146,64 @@
         width: 50px;
         height: 50px;
       }
-      .full-planet-saturn {
-        transform: translateX(470px) scale(10) !important;
-      }
-      .full-planet-uranus {
-        transform: translateX(570px) scale(20) !important;
+      .btn-view-full-planet {
+        position: fixed;
+        height: 30px;
+        bottom: 10%;
+        display: none;
       }
 
+      .btn-view-full-planet button {
+        background-color: #22C096;
+        color: #fff;
+        font-size: 0.8rem;
+        font-weight: bold;
+        text-transform: capitalize;
+        letter-spacing: 1px;
+        outline: none;
+        border: none;
+        padding: 5px;
+        display: flex;
+        align-items: center;
+        gap: 5px;
+        border-radius: 5px;
+      }
+
+      .btn-view-full-planet button img {
+        width: 15px;
+        height: 15px;
+      }
+
+      .section-info {
+        position: fixed;
+        text-align: center;
+        font-size: 1.2rem;
+        color: #fff;
+        width: 600px;
+        top: 50%;
+        left: 50%;
+        margin-top: -70px;
+        margin-left: -320px;
+        background-color: rgba(0, 0, 0, 0.521);
+        line-height: 25px;
+        padding: 10px;
+        border-radius: 10px;
+        clip-path: inset(0 100% 0 0);
+        transition: 1s clip-path;
+      }
+
+      .section-info a {
+        color: #22C096;
+        text-decoration: none;
+        text-transform: uppercase;
+        border-bottom: 2px solid #22C096;
+        display: inline-block;
+        margin-top: 10px;
+      }
+      .open-section-info--texts {
+        clip-path: inset(0 0 0 0) !important;
+        z-index: 2 !important;
+      }
       @media(max-width: 1000px){
         #data  {
           flex-direction: column;
@@ -304,8 +371,7 @@
     document.write(unescape("%3Cscript src='js/jquery.min.js' type='text/javascript'%3E%3C/script%3E"));
   }
   </script>
-  <script src="js/prefixfree.min.js"></script>
-  <script src="js/scripts.min.js"></script>
   <script src="/assets/js/main.js"></script>
+  <script src="/assets/js/music-anim.js"></script>
 </body>
 </html>
