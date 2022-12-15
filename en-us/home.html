@@ -11,6 +11,7 @@
 </head>
 <body class="opening hide-UI view-2D zoom-large data-close controls-close">
     <div class="close-full-planet">
+      Close Planet
       <img src="/assets/icons/close.svg" alt="">
     </div>
     <div id="navbar">
@@ -44,7 +45,7 @@
         <a class="mercury" title="mercury" href="#mercuryspeed"><span class="data-colored"></span>Home</a>
       </div>
       <div class="data-container">
-        <img class="data-img" src="https://nasa3d.arc.nasa.gov/shared_assets/images/ven0aaa2/ven0aaa2-copy-428-321.jpg" alt="">
+        <img class="data-img" src="https://upload.wikimedia.org/wikipedia/commons/thumb/5/57/Solarsystemscope_texture_4k_venus_atmosphere.jpg/800px-Solarsystemscope_texture_4k_venus_atmosphere.jpg?20201026210237" alt="">
         <a class="venus" title="venus" href="#venusspeed"><span class="data-colored"></span>Services</a>
       </div>
       <div class="data-container">
@@ -77,6 +78,8 @@
     </div>
 
     <div class="section-info">
+      <h2 class="section-info--subtitle">EARTH</h2>
+      <h1 class="section-info--title">Portfolio</h1>
       <p>Lorem ipsum dolor sit, amet consectetur adipisicing elit. Eligendi nam cumque eum optio exercitationem. Doloremque corrupti officiis delectus culpa possimus maiores quod voluptas dolores dolorum? Obcaecati possimus rem iste consequatur? Portfolio</p>
       <a href="">Read More</a>
     </div>
@@ -84,12 +87,11 @@
       .nav-logo {
         background-image: url(/assets/img/logo.png);
         width: 250px;
-        height: 50px;
         background-size: contain;
         background-repeat: no-repeat;
       }
       .nav-welcome {
-        margin-left: -130px;
+        margin-left: -70px;
       }
       .nav-links {
         display: flex;
@@ -101,9 +103,9 @@
       }
       #navbar {
         display: flex;
-        justify-content: center;
+        justify-content: space-around;
         height: 70px;
-        gap: 400px;
+        gap: 450px;
       }
       #data {
         display: flex;
@@ -125,7 +127,7 @@
         height: 10px;
         display: none;
         margin-right: 7px;
-        background-color: #22C096;
+        background-color: #4a92f7;
       }
       .active > .data-colored{
         display: inline-block;
@@ -140,11 +142,22 @@
         right: 20%;
         opacity: 0;
         transition: 1s opacity;
-        z-index: 200;
+        z-index: 50;
+        display: flex;
+        gap: 5px;
+        align-items: center;
+        padding: 0 15px;
+        color: #fff;
+        font-size: 13px;
+        border-radius: 5px;
+        height: 30px;
+        cursor: pointer;
+        text-transform: uppercase;
+        letter-spacing: 1px;
       }
       .close-full-planet img {
-        width: 50px;
-        height: 50px;
+        width: 20px;
+        height: 20px;
       }
       .btn-view-full-planet {
         position: fixed;
@@ -177,19 +190,28 @@
       .section-info {
         position: fixed;
         text-align: center;
-        font-size: 1.2rem;
+        font-size: 0.8rem;
         color: #fff;
         width: 600px;
         top: 50%;
         left: 50%;
         margin-top: -70px;
         margin-left: -320px;
-        background-color: rgba(0, 0, 0, 0.521);
         line-height: 25px;
         padding: 10px;
         border-radius: 10px;
         clip-path: inset(0 100% 0 0);
         transition: 1s clip-path;
+        text-transform: uppercase;
+      }
+      
+      .section-info--subtitle {
+        letter-spacing: 2px;
+      }
+
+      .section-info--title {
+        letter-spacing: 4px;
+        margin: 10px 0;
       }
 
       .section-info a {
@@ -199,10 +221,27 @@
         border-bottom: 2px solid #22C096;
         display: inline-block;
         margin-top: 10px;
+        letter-spacing: 2px;
       }
       .open-section-info--texts {
+        letter-spacing: 1px;
         clip-path: inset(0 0 0 0) !important;
         z-index: 2 !important;
+      }
+      .texts--top {
+        top: 70%;
+      }
+      .opacity-100 {
+        opacity: 0 !important;
+      }
+      @media(max-width: 1300px){
+        #navbar {
+          justify-content: space-around;
+          gap: 400px;
+        }
+        .nav-welcome h1 {
+          display: none;
+        }
       }
       @media(max-width: 1000px){
         #data  {
@@ -213,13 +252,17 @@
         }
         #navbar {
           justify-content: start;
+          padding: 15px 20px;
         }
         .nav-welcome {
-          margin-left: -200px;
+          margin-left: -150px;
           margin-top: 10px;
         }
         .nav-links {
           display: none;
+        }
+        .data-container img {
+          margin-right: 10px;
         }
         #toggle-data img {
           height: 50px;
@@ -227,13 +270,19 @@
         }
       }
       @media(max-width: 860px){
-        .nav-welcome {
-          margin-left: -250px;
+        .section-info {
+          margin-left: -315px;
+        }
+        .close-full-planet {
+          position: fixed;
+          top: 94%;
+          right: 3%;
+          left: none;
         }
       }
-      @media(max-width: 760px){
-        .nav-welcome {
-          margin-left: -300px;
+      @media(max-width: 770px){
+        .section-info {
+          top: 70%;
         }
       }
       @media (max-width: 700px){
@@ -243,6 +292,23 @@
         #toggle-data {
           right: 20px;
         }
+        .section-info {
+         margin-left: -300px;
+         padding: 20px;
+        }
+      }
+      @media (max-width: 520px){
+        .section-info {
+          top: 60%;
+          padding: 100px;
+        }
+      }
+      .shadow {
+        width: 100%;
+        height: 100%;
+        opacity: 0;
+        border-radius: 50%;
+        box-shadow: 0px -150px 215px 110px rgb(0, 0, 0) inset;
       }
     </style>
     <div id="controls" style="top: 25%;">
@@ -254,11 +320,11 @@
       </label>
       <label>
         <input type="radio" class="set-speed" name="scale" checked>
-        <span>Speed</span>
+        <span>Zoom Out</span>
       </label>
       <label>
         <input type="radio" class="set-distance" name="scale">
-        <span>Distance</span>
+        <span>Zoom In</span>
       </label>
     </div>
     <div id="universe" class="scale-stretched">
@@ -351,6 +417,9 @@
             </div>
           </div>
           <div id="sun" class="sun-img">
+            <div class="shadow">
+
+            </div>
             <dl class="infos">
               <dt>Sun</dt>
               <dd><span></span></dd>

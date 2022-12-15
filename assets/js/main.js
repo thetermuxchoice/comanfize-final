@@ -1,6 +1,19 @@
 let checkFullPlanet = false
+let color;
+let planetImg;
+let currentImage;
 const universe = document.querySelector("#universe")
-let currentPlanet = "earth active";
+const navBtnContainer = document.querySelectorAll(".data-container")
+const navBtn = document.querySelectorAll(".data-container a")
+const closePlanet = document.querySelector(".close-full-planet")
+const btnPlanet = document.querySelectorAll(".planet")
+const sectionTexts = document.querySelector(".section-info p")
+const sectionTextsContainer = document.querySelector(".section-info")
+const btnViewMore = document.querySelector(".section-info a")
+const sectionSubtitle = document.querySelector(".section-info--subtitle")
+const sunImg = document.querySelector(".sun-img")
+const planetShadow = document.querySelector(".shadow")
+//let currentPlanet = "earth active";
 
 $(window).load(function(){
 
@@ -16,7 +29,10 @@ $(window).load(function(){
     };
 
     var setView = function(view) { 
-      universe.removeClass().addClass(view); 
+      universe.removeClass().addClass(view);
+      if (checkFullPlanet) {
+        closeFullPlanet()
+      }
     };
   
     $("#toggle-data").click(function(e) {
@@ -33,7 +49,7 @@ $(window).load(function(){
     $("#data a").click(function(e) {
       var ref = $(this).attr("class");
       solarsys.removeClass().addClass(ref);
-      currentPlanet = ref;
+      //currentPlanet = ref;
       e.preventDefault();
     });
     
@@ -47,68 +63,83 @@ $(window).load(function(){
   
   });
 
-
-let color;
-let planetImg;
-const navBtn = document.querySelectorAll(".data-container a")
-const closePlanet = document.querySelector(".close-full-planet")
-const btnPlanet = document.querySelectorAll(".planet")
-const btnFullPlanet = document.querySelectorAll(".data-container")
-const sectionTexts = document.querySelector(".section-info p")
-const sectionTextsContainer = document.querySelector(".section-info")
-const btnViewMore = document.querySelector(".section-info a")
-
 const createConfig = (pos) =>{
   switch (pos) {
     case 0:
-      color = "#C67D6A"
+      color = "rgb(188, 125, 106)"
+      colorShadow = "rgb(188, 125, 106, 0.5)"
+      planet = "mercury"
+      sectionTitle = "Home"
       planetImg = "https://www.solarsystemscope.com/images/textures/full/2k_makemake_fictional.jpg"
-      textInfo = "Lorem ipsum dolor sit, amet consectetur adipisicing elit. Eligendi nam cumque eum optio exercitationem. Doloremque corrupti officiis delectus culpa possimus maiores quod voluptas dolores dolorum? Obcaecati possimus rem iste consequatur? Home";
+      textInfo = "Lorem ipsum dolor sit, amet consectetur adipisicing elit. Eligendi nam cumque eum optio exercitationem.";
       break;
     case 1:
-      color = "#9E5212"
-      planetImg = "https://nasa3d.arc.nasa.gov/shared_assets/images/ven0aaa2/ven0aaa2-copy-428-321.jpg"
-      textInfo = "Lorem ipsum dolor sit, amet consectetur adipisicing elit. Eligendi nam cumque eum optio exercitationem. Doloremque corrupti officiis delectus culpa possimus maiores quod voluptas dolores dolorum? Obcaecati possimus rem iste consequatur? Services"
+      color = "#F0CB8C"
+      colorShadow = "rgb(240, 203, 140,0.3)"
+      planet = "venus"
+      sectionTitle = "Services"
+      planetImg = "https://upload.wikimedia.org/wikipedia/commons/thumb/5/57/Solarsystemscope_texture_4k_venus_atmosphere.jpg/800px-Solarsystemscope_texture_4k_venus_atmosphere.jpg?20201026210237"
+      textInfo = "Lorem ipsum dolor sit, amet consectetur adipisicing elit. Eligendi nam cumque eum optio exercitationem."
       break;
     case 2:
-      color = "#22C096"
+      color = "#4a92f7"
+      colorShadow = "rgb(74, 146, 247, 0.5)"
+      planet = "earth"
+      sectionTitle = "Portfolio"
       planetImg = "https://img00.deviantart.net/04ef/i/2009/114/3/e/new_earth_texture_map_by_lightondesigns.jpg"
-      textInfo = "Lorem ipsum dolor sit, amet consectetur adipisicing elit. Eligendi nam cumque eum optio exercitationem. Doloremque corrupti officiis delectus culpa possimus maiores quod voluptas dolores dolorum? Obcaecati possimus rem iste consequatur? Portfolio"
+      textInfo = "Lorem ipsum dolor sit, amet consectetur adipisicing elit. Eligendi nam cumque eum optio exercitationem."
       break;
     case 3:
       color = "#CB543D"
+      colorShadow = "rgb(203, 84, 61, 0.5)"
+      planet = "mars"
+      sectionTitle = "About Us"
       planetImg = "https://s3-us-west-2.amazonaws.com/s.cdpn.io/217233/mars_texture.jpg"
-      textInfo = "Lorem ipsum dolor sit, amet consectetur adipisicing elit. Eligendi nam cumque eum optio exercitationem. Doloremque corrupti officiis delectus culpa possimus maiores quod voluptas dolores dolorum? Obcaecati possimus rem iste consequatur? About Us"
+      textInfo = "Lorem ipsum dolor sit, amet consectetur adipisicing elit. Eligendi nam cumque eum optio exercitationem."
       break;
     case 4:
       color = "#6E645E"
-      planetImg = "https://www.jpl.nasa.gov/spaceimages/images/largesize/PIA07782_hires.jpg"
-      textInfo = "Lorem ipsum dolor sit, amet consectetur adipisicing elit. Eligendi nam cumque eum optio exercitationem. Doloremque corrupti officiis delectus culpa possimus maiores quod voluptas dolores dolorum? Obcaecati possimus rem iste consequatur? Contact Us"
+      colorShadow = "rgb(110, 100, 94, 0.5)"
+      planet = "jupiter"
+      sectionTitle = "contact us"
+      planetImg = "/assets/planets/jupiter2_1k.jpg"
+      textInfo = "Lorem ipsum dolor sit, amet consectetur adipisicing elit. Eligendi nam cumque eum optio exercitationem."
       break;
     case 5:
       color = "#9D8B72"
-      planetImg = "https://www.solarsystemscope.com/images/textures/full/2k_saturn.jpg"
-      textInfo = "Lorem ipsum dolor sit, amet consectetur adipisicing elit. Eligendi nam cumque eum optio exercitationem. Doloremque corrupti officiis delectus culpa possimus maiores quod voluptas dolores dolorum? Obcaecati possimus rem iste consequatur? Team";
+      colorShadow = "rgb(157, 130, 114, 0.5)"
+      planet = "saturn"
+      sectionTitle = "team"
+      planetImg = "https://images-wixmp-ed30a86b8c4ca887773594c2.wixmp.com/f/2115d5b9-b53e-4f1d-81e4-1d21461eeb45/dc6s6fu-e7a08936-a250-4df0-b25d-e9c3024e4423.jpg/v1/fill/w_1312,h_609,q_75,strp/saturn__mixed__texture_for_celestia__remastered__by_roanalcorano_dc6s6fu-fullview.jpg?token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ1cm46YXBwOjdlMGQxODg5ODIyNjQzNzNhNWYwZDQxNWVhMGQyNmUwIiwiaXNzIjoidXJuOmFwcDo3ZTBkMTg4OTgyMjY0MzczYTVmMGQ0MTVlYTBkMjZlMCIsIm9iaiI6W1t7ImhlaWdodCI6Ijw9NjA5IiwicGF0aCI6IlwvZlwvMjExNWQ1YjktYjUzZS00ZjFkLTgxZTQtMWQyMTQ2MWVlYjQ1XC9kYzZzNmZ1LWU3YTA4OTM2LWEyNTAtNGRmMC1iMjVkLWU5YzMwMjRlNDQyMy5qcGciLCJ3aWR0aCI6Ijw9MTMxMiJ9XV0sImF1ZCI6WyJ1cm46c2VydmljZTppbWFnZS5vcGVyYXRpb25zIl19.lQA7oNa_ogvkEUjjxT7AWjC9wpNCVWrCvgmzDZJ_yPI"
+      textInfo = "Lorem ipsum dolor sit, amet consectetur adipisicing elit. Eligendi nam cumque eum optio exercitationem.";
       break;
     case 6:
       color = "#7CB4BE"
+      colorShadow = "rgb(124,180,190, 0.5)"
+      planet = "uranus"
+      sectionTitle = "section 1"
       planetImg= "https://img00.deviantart.net/957c/i/2017/165/4/9/uranus_texture_map_by_jcpag2010-db7yjwb.png"
+      textInfo = "Lorem ipsum dolor sit, amet consectetur adipisicing elit. Eligendi nam cumque eum optio exercitationem."
       break;
     case 7:
       color = "#4471C2"
+      colorShadow = "rgb(68,113,194, 0.5)"
+      planet = "neptune"
+      sectionTitle = "section 2"
       planetImg = "https://www.solarsystemscope.com/images/textures/full/2k_neptune.jpg";
+      textInfo = "Lorem ipsum dolor sit, amet consectetur adipisicing elit. Eligendi nam cumque eum optio exercitationem."
       break;
   }
   setView(pos, planetImg, "scale-s", "set-size");
 }
 for (let i = 0; i < navBtn.length; i++) {
   navBtn[i].addEventListener("click", ()=>{
-    checkActive = document.querySelector("#data .data-container .active")
     createConfig(i)
     //document.querySelector(".btn-view-full-planet button").style.background = color;
   })
 }
 
+/*
 for (let containerPos = 0; containerPos < btnFullPlanet.length; containerPos++) {
   btnFullPlanet[containerPos].addEventListener("click", ()=>{
     currentSplit = currentPlanet.split(" ")[0]
@@ -142,6 +173,9 @@ for (let containerPos = 0; containerPos < btnFullPlanet.length; containerPos++) 
   })
 }
 
+*/
+
+
 for (let planetPos = 0; planetPos < btnPlanet.length; planetPos++) {
   btnPlanet[planetPos].addEventListener("click", ()=>{
     createConfig(planetPos)
@@ -149,23 +183,45 @@ for (let planetPos = 0; planetPos < btnPlanet.length; planetPos++) {
 }
 
 const setView = (pos, img, scale, size) =>{
+  if (currentImage == `url("${img}")`) {
+    return
+  }
   sectionTexts.textContent = textInfo
   sectionTextsContainer.classList.add("open-section-info--texts")
   openFullPlanet(pos, img, scale, size)
-  if (checkFullPlanet) {
-    checkFullPlanet = false
-    return
-  }
-  checkFullPlanet = true
 }
 
 const openFullPlanet = (pos, img, scale, size)=>{
+  if (checkFullPlanet) {
+    planetShadow.style.opacity = .5;
+    universe.className = ""
+    universe.classList.add("scale-stretched")
+    sectionTextsContainer.classList.remove("open-section-info--texts")
+    closePlanet.style.opacity = "0"
+    setTimeout(()=>{
+      sectionTexts.textContent = textInfo
+      sectionTextsContainer.classList.add("open-section-info--texts")
+      openFullPlanetFunc(pos, img, scale, size)
+    }, 800)
+    return
+  }
+  openFullPlanetFunc(pos, img, scale, size)
+  checkFullPlanet = true
+}
+
+const openFullPlanetFunc = (pos, img, scale, size)=> {
   const checkActive = document.querySelector("#data .data-container .active")
   universe.className = ""
   universe.classList.add(scale)
   universe.classList.add(size)
-  document.querySelector(".sun-img").style.background = `url(${img})`
-  document.querySelector(".sun-img").style.boxShadow = `0 0 60px ${color}`
+  planetShadow.style.opacity = 1;
+  sunImg.style.background = `url(${img})`;
+  currentImage = document.querySelector(".sun-img").style.getPropertyValue("background-image")
+  sectionSubtitle.style.color = color;
+  sectionSubtitle.textContent = planet;
+  document.querySelector(".section-info--title").textContent = sectionTitle;
+  sunImg.style.boxShadow = `0 -7px 40px ${colorShadow}`;
+  closePlanet.style.backgroundColor = color;
   closePlanet.style.opacity = "1"
 
   if (checkActive) {
@@ -180,13 +236,32 @@ const openFullPlanet = (pos, img, scale, size)=>{
 }
 
 closePlanet.addEventListener("click", ()=>{
+  checkFullPlanet = false
   universe.className = ""
   universe.classList.add("scale-stretched")
-  checkFullPlanet = false
+  closeFullPlanet()
+})
+
+const closeFullPlanet = () =>{
   setTimeout(()=>{
+    planetShadow.style.opacity = 0;
     document.querySelector("#sun").style.background = ""
+    sunImg.style.boxShadow = "0 0 60px rgba(255, 160, 60, 0.4)"
   },500)
   sectionTextsContainer.classList.remove("open-section-info--texts")
-  document.querySelector(".sun-img").style.boxShadow = "0 0 60px rgba(255, 160, 60, 0.4)"
   closePlanet.style.opacity = "0"
+}
+
+document.querySelector(".set-zoom").addEventListener("click", ()=>{
+  sectionTextsContainer.classList.toggle("texts--top")
 })
+
+document.querySelector(".set-view").addEventListener("click", ()=>{
+  planetShadow.classList.add("opacity-100")
+})
+
+if (window.innerWidth < 1000){
+  planetShadow.classList.add("opacity-100")
+} else {
+  planetShadow.classList.remove("opacity-100")
+}

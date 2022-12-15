@@ -1,4 +1,4 @@
-@import url(https://fonts.googleapis.com/css?family=Open+Sans:400,300);
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&display=swap');
 
 html, body, div, span, applet, object, iframe, h1, h2, h3, h4, h5, h6, p, blockquote, pre, a, abbr, acronym, address, big, cite, code, del, dfn, em, img, ins, kbd, q, s, samp, small, strike, strong, sub, sup, tt, var, b, u, i, center, dl, dt, dd, ol, ul, li, fieldset, form, label, legend, table, caption, tbody, tfoot, thead, tr, th, td, article, aside, canvas, details, embed, figure, figcaption, footer, header, hgroup, menu, nav, output, ruby, section, summary, time, mark, audio, video {
   border: 0;
@@ -34,7 +34,7 @@ table {
 
 body {
   font-size: 10px;
-  font-family: 'Open Sans', sans-serif;
+  font-family: 'Montserrat', sans-serif;
   font-weight: 300;
   background-color: #08090A; }
 
@@ -101,7 +101,8 @@ body {
   transform-style: preserve-3d; }
 
 #sun {
-  background-size: cover;
+  background-size: cover !important;
+  background-position: top center;
   box-shadow: 0 0 60px rgba(255, 160, 60, 0.4); 
   animation: rotate 15s ease infinite;
 }
@@ -199,7 +200,7 @@ body {
 		background-position: 0% 50%;
 	}
 	50% {
-		background-position: 100% 50%;
+		background-position: 20% 20%;
 	}
 	100% {
 		background-position: 0% 50%;
@@ -331,7 +332,7 @@ body {
 #mercury .pos,
 #mercury .planet,
 #mercury.orbit {
-  animation-duration: 2.89016s; }
+  animation-duration: 3.89016s; }
 
 #venus .pos,
 #venus .planet,
@@ -1220,7 +1221,7 @@ h1 span, #navbar h1 a {
   position: absolute;
   top: 0;
   left: 0;
-  padding: 16px;
+  padding: 16px 0 0 16px;
   width: 100%;
   height: 48px; }
 
@@ -1279,7 +1280,10 @@ h1 span, #navbar h1 a {
 #data a {
   margin-bottom: 1px;
   padding: 6px 10px;
-  font-size: 18px; }
+  font-size: 10px;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
 
 #controls label {
   opacity: .6;
@@ -1455,13 +1459,14 @@ h1 {
 /* --------------------------------------------------------------------------- images */
 
 .sun-img {
-  background-image: url(https://openvirtualworlds.org/omeka/files/original/1/20/texture0.jpg) }
+  background-image: url(https://openvirtualworlds.org/omeka/files/original/1/20/texture0.jpg);
+}
 
 #mercury .planet {
   background-image: url(https://www.solarsystemscope.com/images/textures/full/2k_makemake_fictional.jpg); }
 
 #venus .planet {
-  background-image: url(https://nasa3d.arc.nasa.gov/shared_assets/images/ven0aaa2/ven0aaa2-copy-428-321.jpg); }
+  background-image: url(https://upload.wikimedia.org/wikipedia/commons/thumb/5/57/Solarsystemscope_texture_4k_venus_atmosphere.jpg/800px-Solarsystemscope_texture_4k_venus_atmosphere.jpg?20201026210237); }
 
 #earth .planet {
   background-image:url(https://img00.deviantart.net/04ef/i/2009/114/3/e/new_earth_texture_map_by_lightondesigns.jpg); }
@@ -1476,7 +1481,7 @@ h1 {
   background-image: url(https://www.jpl.nasa.gov/spaceimages/images/largesize/PIA07782_hires.jpg); }
 
 #saturn .planet {
-  background-image: url(https://www.solarsystemscope.com/images/textures/full/2k_saturn.jpg); }
+  background-image: url(https://images-wixmp-ed30a86b8c4ca887773594c2.wixmp.com/f/2115d5b9-b53e-4f1d-81e4-1d21461eeb45/dc6s6fu-e7a08936-a250-4df0-b25d-e9c3024e4423.jpg/v1/fill/w_1312,h_609,q_75,strp/saturn__mixed__texture_for_celestia__remastered__by_roanalcorano_dc6s6fu-fullview.jpg?token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ1cm46YXBwOjdlMGQxODg5ODIyNjQzNzNhNWYwZDQxNWVhMGQyNmUwIiwiaXNzIjoidXJuOmFwcDo3ZTBkMTg4OTgyMjY0MzczYTVmMGQ0MTVlYTBkMjZlMCIsIm9iaiI6W1t7ImhlaWdodCI6Ijw9NjA5IiwicGF0aCI6IlwvZlwvMjExNWQ1YjktYjUzZS00ZjFkLTgxZTQtMWQyMTQ2MWVlYjQ1XC9kYzZzNmZ1LWU3YTA4OTM2LWEyNTAtNGRmMC1iMjVkLWU5YzMwMjRlNDQyMy5qcGciLCJ3aWR0aCI6Ijw9MTMxMiJ9XV0sImF1ZCI6WyJ1cm46c2VydmljZTppbWFnZS5vcGVyYXRpb25zIl19.lQA7oNa_ogvkEUjjxT7AWjC9wpNCVWrCvgmzDZJ_yPI); }
 
 #uranus .planet {
   background-image: url(https://img00.deviantart.net/957c/i/2017/165/4/9/uranus_texture_map_by_jcpag2010-db7yjwb.png); }
@@ -1528,7 +1533,7 @@ h1 {
   #data a {
     display: inline-block;
     text-align: center;
-    font-size: 20px;
+    font-size: 13px;
     padding: 15px 15px; }
 
   .data-open #data, .data-close #data {
