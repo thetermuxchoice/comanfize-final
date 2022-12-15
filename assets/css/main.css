@@ -1221,7 +1221,7 @@ h1 span, #navbar h1 a {
   position: absolute;
   top: 0;
   left: 0;
-  padding: 16px 0 0 16px;
+  padding: 16px 16px;
   width: 100%;
   height: 48px; }
 
