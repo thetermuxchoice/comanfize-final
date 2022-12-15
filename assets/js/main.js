@@ -192,12 +192,16 @@ const setView = (pos, img, scale, size) =>{
 }
 
 const openFullPlanet = (pos, img, scale, size)=>{
-  planetShadow.style.opacity = 0.5;
   if (checkFullPlanet) {
     universe.className = ""
     universe.classList.add("scale-stretched")
     sectionTextsContainer.classList.remove("open-section-info--texts")
     closePlanet.style.opacity = "0"
+    setTimeout(()=>{
+      planetShadow.style.opacity = 0;
+      document.querySelector("#sun").style.background = ""
+      sunImg.style.boxShadow = "0 0 60px rgba(255, 160, 60, 0.4)"
+    },500)
     setTimeout(()=>{
       sectionTexts.textContent = textInfo
       sectionTextsContainer.classList.add("open-section-info--texts")
@@ -211,9 +215,7 @@ const openFullPlanet = (pos, img, scale, size)=>{
 
 const openFullPlanetFunc = (pos, img, scale, size)=> {
   const checkActive = document.querySelector("#data .data-container .active")
-  setTimeout(()=>{
-    planetShadow.style.opacity = 1;
-  },700)
+  planetShadow.style.opacity = 1;
   universe.className = ""
   universe.classList.add(scale)
   universe.classList.add(size)
@@ -246,7 +248,7 @@ closePlanet.addEventListener("click", ()=>{
 
 const closeFullPlanet = () =>{
   setTimeout(()=>{
-    planetShadow.style.opacity = 0.1;
+    planetShadow.style.opacity = 0;
     document.querySelector("#sun").style.background = ""
     sunImg.style.boxShadow = "0 0 60px rgba(255, 160, 60, 0.4)"
   },500)
